@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import Button from "../components/Button_comp";
+import {APIURL} from "../env"
+
 
 const EditEquipForm = () => {
 
@@ -30,7 +32,7 @@ const EditEquipForm = () => {
 
   const FormData = async()=>{
     try{
-    const data = await axios.get(`http://localhost:3001/api/equip/${_id}`)
+    const data = await axios.get(`${APIURL}/api/equip/${_id}`)
       setEquip(
       {
         equipName: data.data.equipName,
@@ -50,8 +52,8 @@ const EditEquipForm = () => {
     try{
       const { equipName, makeOfEquip, model, totalQuantity, status } = equip;
       if(equipName && makeOfEquip && model && totalQuantity!=0 && status){
-       await axios.put(`http://localhost:3001/api/equip/${_id}`,equip)
-       await axios.put(`http://localhost:3001/api/equip/status/${_id}`, {status:"available"})
+       await axios.put(`${APIURL}/api/equip/${_id}`,equip)
+       await axios.put(`${APIURL}/api/equip/status/${_id}`, {status:"available"})
 
         .then(res =>{
           // console.log(res)

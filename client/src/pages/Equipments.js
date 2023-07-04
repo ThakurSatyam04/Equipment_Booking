@@ -8,6 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import Footer from '../components/Footer'
 import classNames from 'classnames';
 import moment from 'moment'
+import { APIURL } from '../env';
 
 const Equipments = ({userDetails}) => {
 
@@ -44,7 +45,7 @@ const Equipments = ({userDetails}) => {
 
   const Slots = async () => {
     try {
-        const slots = await axios.get(`http://localhost:3001/api/equip/slots/${_id}`)
+        const slots = await axios.get(`${APIURL}/api/equip/slots/${_id}`)
         setSlots(slots.data)
     } catch(e){
         console.log(e)
@@ -53,7 +54,7 @@ const Equipments = ({userDetails}) => {
 
   const getEquipData = async () => {
     try{
-      const {data} = await axios.get(`http://localhost:3001/api/labs/equip/${_id}`)
+      const {data} = await axios.get(`${APIURL}/api/labs/equip/${_id}`)
           setData(data)
     } catch(e){
         console.log(e)
@@ -62,7 +63,7 @@ const Equipments = ({userDetails}) => {
 
   const getLabDetails = async () =>{
     try{
-      const labDetail = await axios.get(`http://localhost:3001/api/labs/${_id}`)
+      const labDetail = await axios.get(`${APIURL}/api/labs/${_id}`)
       setLabDetail(labDetail.data)
     }catch(err){
       console.log(err)
@@ -104,7 +105,7 @@ const Equipments = ({userDetails}) => {
       const newStatus = remaining > 0 ? "available" : "unavailable";
       // console.log(bookedSlots)
       try{
-        const updateResponse  = await axios.put(`http://localhost:3001/api/equip/status/${equipid}`, {
+        const updateResponse  = await axios.put(`${APIURL}/api/equip/status/${equipid}`, {
           quantity: totalQuantity - bookedSlots,
           status: newStatus
       })
@@ -120,7 +121,7 @@ const Equipments = ({userDetails}) => {
   
   const handleEquipQuantity = async (selectedToTime,date) => {
     try {
-      const getEquipSlots  = await axios.get(`http://localhost:3001/api/equip/slots/equip/${equipid}`)
+      const getEquipSlots  = await axios.get(`${APIURL}/api/equip/slots/equip/${equipid}`)
       // console.log(getEquipSlots)
       // Filter the slots based on the toTime value
         const bookedSlots = getEquipSlots.data.filter((slot) => {
@@ -151,15 +152,15 @@ const Equipments = ({userDetails}) => {
     const newStatus = newQuantity > 0 ? "available" : "unavailable";
 
     try{
-      const updateResponse  = await axios.put(`http://localhost:3001/api/equip/status/${equipid}`, {
+      const updateResponse  = await axios.put(`${APIURL}/api/equip/status/${equipid}`, {
         status: newStatus,
         quantity: newQuantity
       })
 
-      const timeSlot = await axios.put(`http://localhost:3001/api/equip/slots/${equipid}`, newTimeSlot)
+      const timeSlot = await axios.put(`${APIURL}/api/equip/slots/${equipid}`, newTimeSlot)
 
       const EmailDetails = {...isEmail,userDetails,date,fromTime,toTime,equipName}
-      const sendEmail =  await axios.post("http://localhost:3001/api/send-mail/book",EmailDetails);
+      const sendEmail =  await axios.post(`${APIURL}/api/send-mail/book`,EmailDetails);
       // Show the toast with a longer duration
       toast.success("Booking Request Sent Successfully", {
         autoClose: 3000, // Adjust the duration as needed (e.g., 3000 milliseconds = 3 seconds)
@@ -179,7 +180,7 @@ const Equipments = ({userDetails}) => {
   const updateTotalQty = async()=>{
     const newStatus = quantity > 0 ? "available" : "unavailable";
     try{
-      const updateTotalQuantity  = await axios.put(`http://localhost:3001/api/equip/status/${equipid}`, {
+      const updateTotalQuantity  = await axios.put(`${APIURL}/api/equip/status/${equipid}`, {
             status:newStatus,
             quantity: totalQuantity
           })
@@ -208,7 +209,7 @@ const Equipments = ({userDetails}) => {
 
   const deleteExpiredSlots = async () => {
     try {
-      await axios.delete(`http://localhost:3001/api/equip/deleteExpiredSlots`);
+      await axios.delete(`${APIURL}/api/equip/deleteExpiredSlots`);
       console.log('Expired slots deleted successfully');
     } catch (error) {
       console.log('Error deleting expired slots:', error);
