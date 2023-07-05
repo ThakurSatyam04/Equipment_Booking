@@ -1,1 +1,1 @@
-export const APIURL = "https://nmit-labs-be.vercel.app/"
+export const APIURL = "https://nmit-labs-be.vercel.app"
