@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
+import {APIURL} from "../env"
+
 
 const AdminPreviewSlots = ({slots,equipName,model,makeOfEquip,userDetails}) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -39,7 +41,7 @@ const AdminPreviewSlots = ({slots,equipName,model,makeOfEquip,userDetails}) => {
   const handleConfirm= async(e)=>{
     e.preventDefault();
     const EmailDetails = {...isEmail,userDetails,slotDate,slotToTime,slotFromTime,equipName,FacultyEmail,FacultyName}
-    const sendEmail =  await axios.post("http://localhost:3001/api/send-mail/confirm",EmailDetails);
+    const sendEmail =  await axios.post(`$${APIURL}/api/send-mail/confirm`,EmailDetails);
     alert("Request Confirmed")
     setIsClicked(true);
   }
@@ -47,7 +49,7 @@ const AdminPreviewSlots = ({slots,equipName,model,makeOfEquip,userDetails}) => {
   const handleReject = async(e)=>{
     e.preventDefault();
     const EmailDetails = {...isEmail,userDetails,slotDate,slotToTime,slotFromTime,equipName,FacultyEmail,FacultyName}
-    const sendEmail =  await axios.post("http://localhost:3001/api/send-mail/reject",EmailDetails);
+    const sendEmail =  await axios.post(`${APIURL}/api/send-mail/reject`,EmailDetails);
     alert("Request Rejected")
     setIsClicked(true);
   }

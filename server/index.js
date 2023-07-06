@@ -26,8 +26,13 @@ mongoose.connection.on("disconnected", () => {
     console.log("mongoDB disconnected")
 }) 
 
+var corsOptions = {
+    // origin:['https://nmit-labs-fe.vercel.app/','https://nmit-labs-be.vercel.app/'],
+    origin: "*",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 // middlewares
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json())
 // app.use(express.urlencoded());

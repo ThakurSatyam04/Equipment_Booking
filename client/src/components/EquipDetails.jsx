@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import {useNavigate} from 'react-router-dom'
 import classNames from "classnames";
+import { APIURL } from "../env";
 
 const EquipDetails = ({_id,equipName,makeOfEquip,model,labId,quantity,status,setEquipid,setQuantity,setStatus,userDetails,labDetail,setEquipName,setTotalQuantity,totalQuantity,setIsChecked}) => {
 // console.log(_id)
@@ -31,7 +32,7 @@ const EquipDetails = ({_id,equipName,makeOfEquip,model,labId,quantity,status,set
   const handleDelete = async() =>{
     try{
       alert("press Ok to delete");
-      const deleteEquip = await axios.delete(`http://localhost:3001/api/equip/${labId}/${_id}`)
+      const deleteEquip = await axios.delete(`${APIURL}/api/equip/${labId}/${_id}`)
       window.location.reload();
       // console.log(deleteEquip)
     }catch(e){
