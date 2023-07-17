@@ -218,6 +218,4 @@ export const deleteExpiredSlots = async (req,res,next) => {
     console.log(`Number of pulled slots: ${modifiedCount}`);
     } catch (error) {
       console.error('Failed to delete expired slots:', error);
-    }
-  };
-
+}};
