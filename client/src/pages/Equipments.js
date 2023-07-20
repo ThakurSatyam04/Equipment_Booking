@@ -36,15 +36,6 @@ const Equipments = ({userDetails}) => {
   const [isChecked, setIsChecked] = useState(false)
   // console.log(isChecked)
 
-  useEffect(() => {
-    setIsEmail({
-      to: labDetail.email,
-      subject:"Equipment Booking Request",
-      message:"",
-      name:labDetail.labIncharge
-    });
-  }, []);
-
   const Slots = async () => {
     try {
         const slots = await axios.get(`${APIURL}/api/equip/slots/${_id}`)
@@ -169,10 +160,11 @@ const Equipments = ({userDetails}) => {
       });
       
       // console.log(totalQuantity)
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000); 
-
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000); 
+      window.location.reload();
+      
       updateTotalQty();
     }
     catch(err){
@@ -201,9 +193,6 @@ const Equipments = ({userDetails}) => {
   }
   // console.log(totalQuantity)
   
-  useEffect(()=>{
-    getEquipData();
-  },[handleBookSlot])
 
   const deleteExpiredSlots = async () => {
     try {
@@ -214,14 +203,26 @@ const Equipments = ({userDetails}) => {
     }
   };
 
+  useEffect(()=>{
+    getEquipData();
+  },[handleBookSlot])
 
-    useEffect(() => {
-      getEquipData();
-      getLabDetails();
-      deleteExpiredSlots();
-      handleStatus();
-      Slots();
-    },[])
+  useEffect(() => {
+    getEquipData();
+    getLabDetails();
+    deleteExpiredSlots()
+    handleStatus();
+    Slots();    
+  },[])
+  
+  useEffect(() => {
+    setIsEmail({
+      to: labDetail.email,
+      subject:"Equipment Booking Request",
+      message:"",
+      name:labDetail.labIncharge
+    });
+  }, []);
 
     const handleAdminPreview= ()=>{
       navigate(`/adminPreview/${_id}`)
@@ -414,6 +415,7 @@ const Equipments = ({userDetails}) => {
               Confirm Slot
             </button>
           </div>
+          {/* <button onClick={()=>deleteExpiredSlots()} >DeleteSlots</button> */}
             <div className=''>
               <Footer/>
             </div>

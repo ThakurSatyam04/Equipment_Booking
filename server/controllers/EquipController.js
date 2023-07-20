@@ -181,43 +181,110 @@ export const deleteEquip = async (req,res,next) => {
     }
 }
  
-export const deleteExpiredSlots = async (req,res,next) => {
-    try {
-      const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month, and padding with leading zero if needed
-      const day = String(currentDate.getDate()).padStart(2, '0'); // Padding with leading zero if needed
-      const formattedDate = `${year}-${month}-${day}`;
-      const dateOnly = `${formattedDate}T00:00:00.000+00:00`;
-      const currentTime = moment(currentDate).format('HH:mm');
+// export const deleteExpiredSlots = async (req,res,next) => {
+//     try {
+//       const currentDate = new Date();
+//       const year = currentDate.getFullYear();
+//       const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month, and padding with leading zero if needed
+//       const day = String(currentDate.getDate()).padStart(2, '0'); // Padding with leading zero if needed
+//       const formattedDate = `${year}-${month}-${day}`;
+//       const dateOnly = `${formattedDate}T00:00:00.000+00:00`;
+//       const currentTime = moment(currentDate).format('HH:mm');
 
-      console.log(dateOnly)
-      console.log(currentTime)
+//       console.log(dateOnly)
+//       console.log(currentTime)
+//       // if(Equip.slots.date < dateOnly){
 
-      const result = await Equip.updateMany(
-        {
-            $or: [
-              { 'slots.date': { $eq: dateOnly }, 'slots.toTime': { $lt: currentTime } },
-              { 'slots.date': { $lt: dateOnly } },
+//         const result = await Equip.updateMany(
+//           {
+//             $or: [
+//               { 'slots.date': { $eq: dateOnly }, 'slots.toTime': { $lt: currentTime } },
+//               { 'slots.date': { $lt: dateOnly } },
+//             ],
+//         },
+//         {
+//           $pull: {
+//             'slots': {
+//               $or: [
+//                 { date: { $eq: dateOnly }, toTime: { $lt: currentTime } },
+//                 { date: { $lt: dateOnly } },
+//               ],
+//             },
+//           },
+//         }
+//         );
+//         // const totalSlots = equipment.slots.length;
+//         const modifiedCount = result.nModified;
+        
+//         console.log(`Number of pulled slots: ${modifiedCount}`);
+//       // }
+//       // else{
+//       //   console.log("The Time is still left")
+//       //   return;
+//       // } 
+//       } catch (error) {
+//       console.error('Failed to delete expired slots:', error);
+// }};
+
+export const deleteExpiredSlots = async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    const dateOnly = `${formattedDate}T00:00:00.000+00:00`;
+    const currentTime = moment(currentDate); // Convert current time to a moment object
+
+    console.log(dateOnly);
+    console.log(currentTime.format('HH:mm'));
+
+    const result = await Equip.updateMany(
+      {
+        $or: [
+          {
+            $and: [
+              { 'slots.date': { $eq: dateOnly } },
+              {
+                $expr: {
+                  $lt: [
+                    { $dateFromString: { dateString: '$slots.toTime', format: '%H:%M' } },
+                    currentTime,
+                  ],
+                },
+              },
             ],
-        },
-        {
-          $pull: {
-            'slots': {
-              $or: [
-                { date: { $eq: dateOnly }, toTime: { $lt: currentTime } },
-                { date: { $lt: dateOnly } },
-              ],
-            },
           },
-        }
-      );
-      // const totalSlots = equipment.slots.length;
-      const modifiedCount = result.nModified;
+          { 'slots.date': { $lt: dateOnly } },
+        ],
+      },
+      {
+        $pull: {
+          'slots': {
+            $or: [
+              {
+                $and: [
+                  { date: { $eq: dateOnly } },
+                  {
+                    $expr: {
+                      $lt: [
+                        { $dateFromString: { dateString: '$slots.toTime', format: '%H:%M' } },
+                        currentTime,
+                      ],
+                    },
+                  },
+                ],
+              },
+              { date: { $lt: dateOnly } },
+            ],
+          },
+        },
+      }
+    );
 
+    const modifiedCount = result.nModified;
     console.log(`Number of pulled slots: ${modifiedCount}`);
-    } catch (error) {
-      console.error('Failed to delete expired slots:', error);
-    }
-  };
-
+  } catch (error) {
+    console.error('Failed to delete expired slots:', error);
+  }
+};
