@@ -27,7 +27,7 @@ mongoose.connection.on("disconnected", () => {
 }) 
 
 var corsOptions = {
-    // origin:['https://nmit-labs-fe.vercel.app/','https://nmit-labs-be.vercel.app/'],
+    // origin:['http://localhost:3001','https://nmit-labs-be.vercel.app/'],
     origin: "*",
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }

@@ -14,7 +14,7 @@ router.get("/slots/:labid", getAllSlots)
 router.get("/slots/equip/:equipid", getSlots)
 router.get("/slots/:equipid/:slotid", getSlot) 
 router.put("/status/:equipid/", equipStatus)
-router.delete('/deleteExpiredSlots', deleteExpiredSlots);
+router.put('/deleteExpiredSlots', deleteExpiredSlots);
 
 
 // router.post("/:labid/:equipid/slots", createSlot)
