@@ -1,1 +1,2 @@
-export const APIURL = "https://nmit-labs-be.vercel.app"
+// export const APIURL = process.env.REACT_APP_DEV_APIURL
+export const APIURL = "http://localhost:3001"
