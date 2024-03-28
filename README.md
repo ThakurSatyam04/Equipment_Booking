@@ -1,3 +1,8 @@
-**Login as super admin to see all the features :**<br/>
-***email id: satyamthakur04.2000@gmail.com***<br/>
-***password: Satyam@123***
+## NMIT BOOKING Website
+
+## Steps for setup
+
+### Step1 - use command "npm i" to install nodemodule for both client and server folder
+### Step2 - Run command "npm run dev" into the server folder to start the server
+### Step3 - Run command "npm run start" to start the client server
+
